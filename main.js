@@ -5,26 +5,58 @@ class ProductManager {
     constructor(){
         this.products = []
     }
-    getProducts()
-    getProductsById()
+
+    addProducts(product) {
+        if (this.products.find(producto => producto.code == product.code)){
+            return "Producto Existente"
+        }else{
+            this.products.push(product)
+            //Producto no existente con este codigo
+        }
+    }
+
+    getProducts(){
+        return this.products
+    }
+    
+    getProductsById(id){
+        const product = this.products.find(producto => producto.id == id)
+
+        if(product){
+            return product
+        }else{
+            return "NOT FOUND"
+        }
+
+    }
+
 }
 
 class Product{
-    constructor(title, description, price, thumbnail, code, stock){
+    constructor(title = "", description = "", price= "", thumbnail= "", code= "", stock= ""){
         this.title = title,
         this.description = description,
         this.price = price,
         this.thumbnail = thumbnail,
         this.code = code,
-        this.stock = stock
+        this.stock = stock,
+        this.id = Product.incrementarID()
+    }
+
+    static incrementarID(){
+        if (this.idIncrement){
+            this.idIncrement++
+        }else{
+            this.idIncrement = 1
+        }
+        return this.idIncrement
     }
 }
 
 class muebleria extends Product{
-    constructor(title, description, price, thumbnail, code, stock, category, id){
+    constructor(title, description, price, thumbnail, code, stock, category){
         super(title, description, price, thumbnail, code, stock)
-        this.category = category,
-        this.id = id
+        this.category = category
     }
     static generalDescription = "Boost GOOD VIBES starting from where you belong. Your favorite Marketplace website to get along with ideas and inspirations for your home.";
     caption = () =>{
@@ -46,19 +78,15 @@ kitchen.caption()
 kids.caption()
 outdoor.caption()
 
-const getProducts = () =>{
-   return muebleria.map (product => product.title)
-}
+// const getProducts = () =>{
+//    return muebleria.map (product => product.title)
+// }
 
-const getProductsById = () =>{
-    muebleria.filter (product => product.id)
-    if(id ==! id){
-        console.log ("Not Found")
-    }else{
-        console.log(product.id)
-    }
-}
-
-const addProducts = () => {
-    return muebleria.reduce((acum, el) => acum + el.quantity, 0)
-}
+// const getProductsById = () =>{
+//     muebleria.filter (product => product.id)
+//     if(id ==! id){
+//         console.log ("Not Found")
+//     }else{
+//         console.log(product.id)
+//     }
+// }
