@@ -20,7 +20,10 @@ export class ProductManager {
 
         const adding = await fs.readFile(this.path, 'utf-8')
         const addingConst = JSON.parse(adding)
-        product.id = ProductManager.incrementarID()
+
+        // product.id = ProductManager.incrementarID() De querer hacer uso de un ID autoincrementable, seria mejor aplicar un reduce
+        // o mover el static para la const de ProductManager?
+        
         addingConst.push(product)
         await fs.writeFile(this.path, JSON.stringify(addingConst))
         return "Producto Creado"
@@ -35,14 +38,14 @@ export class ProductManager {
     
     async getProductsById(id){
         const product = await fs.readFile(this.path, 'utf-8')
-        const prod = JSON.parse(this.products.find(producto => producto.id === parseInt(id)))
+        const prod = JSON.parse(product).find(producto => producto.id === parseInt(id))
         console.log(prod)
         
-        if(product){
+        if(prod){
             return prod
         }else{
-            const notFound = await fs.writeFile(this.path, "NOT FOUND")
-            console.log(notFound)    
+            // const notFound = await fs.writeFile(this.path, "NOT FOUND") Seria redundante plantearlo de esta manera?
+            console.log("Not Found")    
         }
 
     }
@@ -102,30 +105,25 @@ class Product{
     }
 }
 
-class muebleria extends Product{
-    constructor(title, description, price, thumbnail, code, stock, category){
-        super(title, description, price, thumbnail, code, stock)
-        this.category = category
-    }
-    static generalDescription = "Boost GOOD VIBES starting from where you belong. Your favorite Marketplace website to get along with ideas and inspirations for your home.";
-    caption = () =>{
-        console.log(`${this.title} let's start! ${muebleria.generalDescription}`)
-    }
-}
+// class muebleria extends Product{
+//     constructor(title, description, price, thumbnail, code, stock, category){
+//         super(title, description, price, thumbnail, code, stock)
+//         this.category = category
+//     }
+//     static generalDescription = "Boost GOOD VIBES starting from where you belong. Your favorite Marketplace website to get along with ideas and inspirations for your home.";
+//     caption = () =>{
+//         console.log(`${this.title} let's start! ${muebleria.generalDescription}`)
+//     }
+// }
 
 
-const furniture = new muebleria ("Furniture", "Sofas, Beds and Matresses, Game Stations, and more...", 300, "ruta-imagen", "US-356-1", 150, "Sofas")
+const furniture = new Product ("Furniture", "Sofas, Beds and Matresses, Game Stations, and more...", 300, "ruta-imagen", "US-356-1", 150, "Sofas")
 console.log(furniture)
-const storage = new muebleria("Storage and Organization", "TV & Media furniture, Shelves, Displays and cabinets...", 150, "ruta-imagen", "US-356-2", 600, "TV & Media")
-const kitchen = new muebleria ("Kitchen and Appliances", "Appliances, Kitchen islands and Carts, Drawers...", 220, "ruta-imagen", "US-356-3", 550)
-const kids = new muebleria ("Baby & Kids", "Take the next Step for your kids room", 125, "ruta-imagen", "US-356-4", 178)
-const outdoor = new muebleria ("Outdoor Areas", "Flooring, plots and plants, Furniture, Lighting...", 257, "ruta-imagen", "US-356-5", 450)
+const storage = new Product("Storage and Organization", "TV & Media furniture, Shelves, Displays and cabinets...", 150, "ruta-imagen", "US-356-2", 600, "TV & Media")
+const kitchen = new Product ("Kitchen and Appliances", "Appliances, Kitchen islands and Carts, Drawers...", 220, "ruta-imagen", "US-356-3", 550)
+const kids = new Product ("Baby & Kids", "Take the next Step for your kids room", 125, "ruta-imagen", "US-356-4", 178)
+const outdoor = new Product ("Outdoor Areas", "Flooring, plots and plants, Furniture, Lighting...", 257, "ruta-imagen", "US-356-5", 450)
 
 const prod = new ProductManager ('./info.txt')
 await prod.getProducts()
 
-// furniture.caption()
-// storage.caption()
-// kitchen.caption()
-// kids.caption()
-// outdoor.caption()
