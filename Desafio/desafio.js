@@ -1,6 +1,6 @@
 import {promises as fs} from 'fs'
 
-class ProductManager {
+export class ProductManager {
     constructor(path){
         this.path = path
         this.products = []
