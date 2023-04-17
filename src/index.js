@@ -11,7 +11,6 @@
 
 import express from 'express';
 import {ProductManager } from '../Desafio/ProductManager.js';
-import { parse } from 'path';
 
 const productManager = new ProductManager('info.txt')
 
