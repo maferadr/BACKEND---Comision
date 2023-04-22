@@ -16,6 +16,7 @@ const productManager = new ProductManager('info.txt')
 
 const app = express()
 const PORT = 4000
+app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
 
