@@ -34,15 +34,17 @@ app.get('/product', async (req, res)=>{
 })
 
 app.get('/product/:id', async (req, res) =>{
-    const idProduct = await productManager.getProductsById() // Guardo en una constante los valores solicitados por getProductsById
+    const idProduct = await productManager.getProductsById(req.params.id) 
+    res.send(idProduct)
 
-    const getIdProduct = await idProduct.find(prod => prod.id === parseInt(req.params.id)) 
-    if(getIdProduct){
-        res.send(`El producto ${idProduct.nombre} con el ID ${req.params.id} pertenece a la categoria de ${idProduct.categoria}`)
-    }else{
-        res.send(`El producto con el ID ${req.params.id} no se encuentra`)
-    }
-    console.log(getIdProduct)
+    // const idProduct = await productManager.getProductsById() // Guardo en una constante los valores solicitados por getProductsById
+    // const getIdProduct = await idProduct.find(prod => prod.id === parseInt(req.params.id)) 
+    // if(getIdProduct){
+    //     res.send(`El producto ${idProduct.nombre} con el ID ${req.params.id} pertenece a la categoria de ${idProduct.categoria}`)
+    // }else{
+    //     res.send(`El producto con el ID ${req.params.id} no se encuentra`)
+    // }
+    // console.log(getIdProduct)
 })
 
 app.listen(PORT, ()=>{
