@@ -16,42 +16,8 @@ const productManager = new ProductManager('info.txt')
 
 const app = express()
 const PORT = 4000
-
-const muebles = [
-    {
-        id: 1,
-        nombre: "Sofa cama",
-        categoria: "Habitaciones"
-    },
-    {
-        id: 2,
-        nombre: "Mueble Individual",
-        categoria: "Studio"
-    },
-    {
-        id: 3,
-        nombre: "Muebles Familiares",
-        categoria: "Living room"
-    }
-]
-
-
 app.use(express.urlencoded({ extended: true}))
 
-app.get('/mueble', (req, res)=>{
-    let {nombre, categoria} = req.query
-    const furniture = muebles.filter(mueble => mueble.nombre === nombre)
-    res.send(JSON.stringify(furniture))
-})
-
-app.get('/mueble/:id', (req, res)=>{
-    const mueble = muebles.find(sofa => sofa.id === parseInt(req.params.id))
-    if(mueble){
-        res.send(`El producto ${mueble.nombre} con el ID ${req.params.id} pertenece a la categoria de ${mueble.categoria}`)
-    }else{
-        res.send(`El producto con el ID ${req.params.id} no se encuentra`)
-    }
-})
 
 app.get('/', (req, res)=>{
     res.send("Mi primer servidor con Express")
@@ -61,7 +27,21 @@ app.get('/', (req, res)=>{
 app.get('/product', async (req, res)=>{
     let {limit} = req.query
     const products = await productManager.getProducts()
-    res.send(JSON.stringify(products))
+
+    const prodLimit = await products.slice(0, limit)
+    res.send(JSON.stringify(prodLimit))
+})
+
+app.get('/product/:id', async (req, res) =>{
+    const idProduct = await productManager.getProductsById() // Guardo en una constante los valores solicitados por getProductsById
+
+    const getIdProduct = idProduct.find(prod => prod.id === parseInt(req.params.id)) 
+    if(getIdProduct){
+        res.send(`El producto ${idProduct.nombre} con el ID ${req.params.id} pertenece a la categoria de ${idProduct.categoria}`)
+    }else{
+        res.send(`El producto con el ID ${req.params.id} no se encuentra`)
+    }
+    console.log(getIdProduct)
 })
 
 app.listen(PORT, ()=>{

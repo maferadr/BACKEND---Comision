@@ -7,23 +7,9 @@ export class ProductManager {
     }
 
     async addProducts(product) {
-        // const adding = await fs.writeFile(this.path, JSON.stringify(this.products)) // Escribe los productos que contenga el array, si no existen, LOS CREA
-
-        // if (this.products.find(producto => producto.code == product.code)){
-        //     return "Producto Existente"
-        // }else{
-        //     const aux = JSON.parse(adding)
-        //     aux.push(product) // Anade el producto que no exista aun 
-
-        //     //Producto no existente con este codigo
-        // }
 
         const adding = await fs.readFile(this.path, 'utf-8')
-        const addingConst = JSON.parse(adding)
-
-        // product.id = ProductManager.incrementarID() De querer hacer uso de un ID autoincrementable, seria mejor aplicar un reduce
-        // o mover el static para la const de ProductManager?
-        
+        const addingConst = JSON.parse(adding)        
         addingConst.push(product)
         await fs.writeFile(this.path, JSON.stringify(addingConst))
         return "Producto Creado"
@@ -44,7 +30,6 @@ export class ProductManager {
         if(prod){
             return prod
         }else{
-            // const notFound = await fs.writeFile(this.path, "NOT FOUND") Seria redundante plantearlo de esta manera?
             console.log("Not Found")    
         }
 
