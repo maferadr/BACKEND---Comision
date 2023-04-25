@@ -10,32 +10,17 @@
 // })
 
 import express from 'express';
-import {ProductManager } from '../Desafio/ProductManager.js';
-
-const productManager = new ProductManager('info.txt')
+import productRouter from './routes/products.routes';
 
 const app = express()
 const PORT = 4000
+
+//Middlewares 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
-
-app.get('/', (req, res)=>{
-    res.send("Mi primer servidor con Express")
-})
-
-
-app.get('/product', async (req, res)=>{
-    let {limit} = req.query
-    const products = await productManager.getProducts()
-
-    const prodLimit = await products.slice(0, limit)
-    res.send(JSON.stringify(prodLimit))
-})
-
-app.get('/product/:id', async (req, res) =>{
-    const idProduct = await productManager.getProductsById(req.params.id) 
-    res.send(idProduct)
+//Routes
+app.use('/product', productRouter)
 
     // const idProduct = await productManager.getProductsById() // Guardo en una constante los valores solicitados por getProductsById
     // const getIdProduct = await idProduct.find(prod => prod.id === parseInt(req.params.id)) 
@@ -45,7 +30,6 @@ app.get('/product/:id', async (req, res) =>{
     //     res.send(`El producto con el ID ${req.params.id} no se encuentra`)
     // }
     // console.log(getIdProduct)
-})
 
 app.listen(PORT, ()=>{
     console.log (`Server on Port ${PORT}`)
