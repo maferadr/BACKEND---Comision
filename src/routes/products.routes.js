@@ -3,7 +3,7 @@ import { ProductManager } from "../ProductManager.js";
 
 
 const productRouter = Router()
-const productManager = new ProductManager('./info.txt')
+const productManager = new ProductManager('./productos.txt')
 
 // app.get('/', (req, res)=>{
 //     res.send("Mi primer servidor con Express")

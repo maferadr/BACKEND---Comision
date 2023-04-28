@@ -35,7 +35,7 @@ export class ProductManager {
 
     }
 
-    async updateProduct(id, {title, description, price, thumbnail, code, stock}){
+    async updateProduct(id, {title, description, price, thumbnail, code, stock, status}){
         const adding = await fs.readFile(this.path, 'utf-8')
         const addingConst = JSON.parse(adding)
         if(addingConst.some(prod => prod.id === parseInt(id))){
@@ -46,6 +46,7 @@ export class ProductManager {
             addingConst[index].thumbnail = thumbnail,
             addingConst[index].code = code,
             addingConst[index].stock = stock,
+            addingConst[index]. status = status,
             await fs.writeFile(this.path, JSON.stringify(addingConst))
             return "Product Uptaded"
         }else{
@@ -110,6 +111,6 @@ const kitchen = new Product ("Kitchen and Appliances", "Appliances, Kitchen isla
 const kids = new Product ("Baby & Kids", "Take the next Step for your kids room", 125, "ruta-imagen", "US-356-4", 178)
 const outdoor = new Product ("Outdoor Areas", "Flooring, plots and plants, Furniture, Lighting...", 257, "ruta-imagen", "US-356-5", 450)
 
-const prod = new ProductManager ('./info.txt')
+const prod = new ProductManager ('./productos.txt')
 await prod.getProducts()
 

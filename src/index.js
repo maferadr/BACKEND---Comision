@@ -1,19 +1,12 @@
-// import http from 'http'
-
-// const PORT = 4000
-// const server = http.createServer((request, response) => {
-//     response.end("Hola este es mi primer servidor con Node")
-// })
-
-// server.listen(PORT, () =>{
-//     console.log(`Server on port ${PORT}`)
-// })
 
 import express from 'express';
 import productRouter from './routes/products.routes';
+import carritoRouter from './routes/carrito.routes';
+import { _dirname } from './path';
 
 const app = express()
 const PORT = 4000
+
 
 //Middlewares 
 app.use(express.json())
@@ -21,6 +14,9 @@ app.use(express.urlencoded({ extended: true}))
 
 //Routes
 app.use('/product', productRouter)
+app.use('/static', express.static(_dirname + '/public'))
+app.use('/carrito', carritoRouter)
+
 
     // const idProduct = await productManager.getProductsById() // Guardo en una constante los valores solicitados por getProductsById
     // const getIdProduct = await idProduct.find(prod => prod.id === parseInt(req.params.id)) 
