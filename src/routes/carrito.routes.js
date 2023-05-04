@@ -22,4 +22,16 @@ carritoRouter.post("/:cid/product/:pid", async (req, res)=>{
     res.send("Producto agregado al Carrito")
 })
 
+carritoRouter.post("/carts", async (req, res)=>{
+    const{id, products} = req.body
+    if(products => products.id === parseInt(id)){
+        await cartManager.incrementarID() //Si el ID existe, se autoincrementa
+    }else{ //Si no, se crea
+        await cartManager.createCarrito((id, products) =>{
+            this.id = id,
+            this.products = products
+        })
+    }
+})
+
 export default carritoRouter
