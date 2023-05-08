@@ -29,10 +29,12 @@ carritoRouter.post("/:cid/product/:pid", async (req, res)=>{
 
 carritoRouter.post("/carts", async (req, res)=>{
     const{id, products} = req.body
-    await cartManager.createCarrito((id, products) =>{
-        id = 1,
-        products = []
-    })
+    await cartManager.createCarrito({id, products}) //Llama a la funcion createCarrito ejecutada en CartManager.js
+
+    // await cartManager.createCarrito((id, products) =>{
+    //     id = 1,
+    //     products = []
+    // })
     res.send(`El producto con el ID ${req.params.id} se ha creado`)
 })
 
