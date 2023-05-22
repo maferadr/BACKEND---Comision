@@ -3,22 +3,24 @@ import {promises as fs} from 'fs'
 export class ProductManager {
     constructor(path){
         this.path = path
-        this.products = []
+        // this.products = []
     }
 
-    async addProducts(product) {
+    async addProducts(title, description, price, thumbnail, code, stock, status) {
 
         const adding = await fs.readFile(this.path, 'utf-8')
-        const addingConst = JSON.parse(adding)        
-        addingConst.push(product)
+        const addingConst = JSON.parse(adding)  
+        const prod = new Product(title, description, price, thumbnail, code, stock, status)
+        addingConst.push(prod)
+
         await fs.writeFile(this.path, JSON.stringify(addingConst))
-        return "Producto Creado"
+        // return "Producto Creado"
     }
 
     async getProducts(){
         const products = await fs.readFile(this.path, 'utf-8')
         const prods = JSON.parse(products)
-        console.log(prods)
+        return prods
     }
 
     
@@ -30,7 +32,7 @@ export class ProductManager {
         if(prod){
             return prod
         }else{
-            console.log("Not Found")    
+            return "Not Found" 
         }
 
     }
@@ -61,7 +63,7 @@ export class ProductManager {
         if(addingConst.some(prod => prod.id === parseInt(id))){
             const prodFiltered = addingConst.filter(prod => prod.id !== parseInt(id))
             await fs.writeFile(this.path, JSON.stringify(prodFiltered))
-            return "Product Deleted"
+            // return "Product Deleted"
         }else{
             return "Not Found"
         }

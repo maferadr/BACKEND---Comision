@@ -14,27 +14,30 @@ carritoRouter.get("/:cid", async (req, res)=>{
 })
 
 carritoRouter.post("/:cid/product/:pid", async (req, res)=>{
-    const{id, quantity} = req.body
-    if(products => products.id === parseInt(id)){
-        await cartManager.incrementarID() //Si el ID existe, se autoincrementa
-    }else{
-        await cartManager.addProductCart((id, quantity) =>{
-            id = 1,
-            quantity = 1
-        })
+    try{
+        const{ cid, pid } = req.params;
+        const {quantity} = req.body
+
+            let productAdd = await cartManager.addProductCart(cid, pid, quantity)
+            if(productAdd){
+                res.send("Producto Agregado al Carrito")
+            }else{
+                res.send(`El producto con el ID ${cid} no existe`) //No deberia de concatenarse el req.params.cid? O al ya declararlo previamente
+                //como req.params se toma como tal?
+            }
+
+    }catch(error){
+        res.send(error)
     }
-   
-    res.send("Producto agregado al Carrito")
 })
 
 carritoRouter.post("/carts", async (req, res)=>{
-    const cart = await cartManager.createCarrito() //Llama a la funcion createCarrito ejecutada en CartManager.js
-    
-    // await cartManager.createCarrito((id, products) =>{
-    //     id = 1,
-    //     products = []
-    // })
-    res.send(`El producto con el ID ${req.params.id} se ha creado`)
+    try{
+        await cartManager.createCarrito() //Llama a la funcion createCarrito ejecutada en CartManager.js
+        res.send("Carrito Creado")
+    }catch(error){
+        res.send(error)
+    }
 })
 
 export default carritoRouter

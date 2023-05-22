@@ -1,4 +1,5 @@
-import {promises as fs} from 'fs'
+import {promises as fs, writeFile} from 'fs'
+import { parse } from 'path'
 
 export class CartManager {
     constructor(path){
@@ -19,7 +20,7 @@ export class CartManager {
         const cart = JSON.parse(carritoJSON)
         const carrito = {
             id: CartManager.incrementarID(),
-            cantidad: []
+            products: []
         }
 
         cart.push(carrito)
@@ -37,26 +38,42 @@ export class CartManager {
         }
     }
 
-    async addProductCart(id, quantity, idCart){
+    async addProductCart(idCart, quantity, idProduct){
         const carritoJSON = await fs.readFile(this.path, 'utf-8')
         const cart = JSON.parse(carritoJSON)
+        //Se busca el carrito especificado
         const carrito = cart.find( carro => carro.id === parseInt(idCart))
-        if(carrito.cantidad.some(product => product.id === parseInt(id))){
-            let carritoAdded = cart.findIndex(prod = prod.stock === parseInt(quantity))
-            carrito.push(carritoAdded) //La const carrito vendria haciendo referencia al ID autoincrementable
-            carritoAdded[index].stock = quantity,
-            await fs.writeFile(this.path, JSON.stringify(carritoAdded))
-            return "Product Added"
-            //Se modifica la cantidad
+
+        if(carrito){
+            //si existe, verifico si ya fue previamente agregado
+            if(carrito.products.some(product => product.product === parseInt(idProduct))){
+                //Se busca el indice del carrito para modificar su cantidad al agregarlo
+                let carritoAdded = carrito.products.findIndex(product => product.product === parseInt(idProduct))
+
+                carrito.products[index].product = parseInt(idProduct)
+                carrito.products[index].quantity = carrito.products[index].quantity + parseInt(quantity)
+
+                let indexCart = cart.findIndex( c => c.id === parseInt(idCart))
+                cart[indexCart] = carrito
+
+                //se reescriben los archivos txt con los datos obtenidos
+                await fs.writeFile(this.path, JSON.stringify(cart))
+                return true
+            }else{
+                const newproduct = {"product":parseInt(idProduct),"quantity":parseInt(quantity)}
+                carrito.products.push(newproduct)
+
+                //Se busca el indice del carrito para modificarlo
+                let indexCart = carts.findIndex(c => c.id === parseInt(idCart))
+                carts[indexCart]= carrito
+
+                await fs.writeFile(this.path, JSON.stringify(carts))
+                return true
+            }
+        
         }else{
-            const create = await fs.writeFile(this.path, JSON.stringify(cart), () =>{
-                this.id = id,
-                this.quantity = quantity
-            })
-            return "Product Created"
-            create.push()
+            return false
         }
-        //Crear nuevo objeto con id y quantity y guardarlo en el carrito
-    }
+}
 }
 

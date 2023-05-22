@@ -23,32 +23,16 @@ productRouter.get("/", async (req, res)=>{
     
 })
 
-//Real Time Products
-productRouter.get("/realTimeProducts", async (req, res) =>{
-    try{
-        const products = await productManager.getProducts() 
-        res.render('realTimeProducts', {products})
-    }catch(error){
-        res.send(error)
-    }
-})
-
-
 productRouter.get("/:id", async (req, res) =>{
     const idProduct = await productManager.getProductsById(req.params.id) 
-    res.render('product', {
-        title: idProduct.title,
-        description: idProduct.description,
-        price: idProduct.price,
-        code: idProduct.code,
-        stock: idProduct.stock,
-    })
+    res.send(idProduct)
 })
    
 productRouter.post("/", async (req, res)=>{
     const {title, description, price, thumbnail, code, stock, status} = req.body
-    await productManager.addProducts({title, description, price, thumbnail, code, stock, status})
-    req.io.emit("mensaje", "Hola")
+    const product = await productManager.addProducts(title, description, price, thumbnail, code, stock, status)
+    res.send(product)
+    // req.io.emit("mensaje", "Hola")
     res.send("Producto Creado")
 })
 
